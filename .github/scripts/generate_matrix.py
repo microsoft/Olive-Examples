@@ -22,9 +22,4 @@ for filepath in Path(dirpath).rglob("olive_ci_*.json"):
 
 matrix = {"include": examples}
 output = json.dumps(matrix)
-# print("re.escape", re.escape(output))       # \{"include":\ \[\{"name":\ "bert/ptq_cpu",\ "config":\ "bert\\\\olive_ci_ptq_cpu\.json"\},\ \{"name":\ "phi3_5/qnn",\ "config":\ "phi3_5\\\\olive_ci_qnn\.json"\}\]\}
-# print("shlex.quote", shlex.quote(output))   # '{"include": [{"name": "bert/ptq_cpu", "config": "bert\\olive_ci_ptq_cpu.json"}, {"name": "phi3_5/qnn", "config": "phi3_5\\olive_ci_qnn.json"}]}'
-# print("json.dumps", json.dumps(output))     # {\"include\": [{\"name\": \"bert/ptq_cpu\", \"config\": \"bert\\\\olive_ci_ptq_cpu.json\"}, {\"name\": \"phi3_5/qnn\", \"config\": \"phi3_5\\\\olive_ci_qnn.json\"}]}
-# output = json.dumps(output)[1:-1]
-#print(f"::set-output name=matrix::{output}")
 print(output)
