@@ -49,11 +49,11 @@ jobs:
       with:
         python-version: ${{ env.PYTHON_VERSION }}
 
-    - name: Scan, set matrix
+    - name: Scan & generate matrix
       id: set-matrix
       run: |
-        echo $pwd
-        python .github/scripts/generate_matrix.py $pwd
+        echo ${{ github.workspace }}
+        python .github/scripts/generate_matrix.py ${{ github.workspace }}
 
   run-examples:
     needs: generate-matrix
