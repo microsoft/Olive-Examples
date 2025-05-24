@@ -1,0 +1,67 @@
+name: main
+description: "CI workflow for Olive Examples"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+
+env:
+  PYTHON_VERSION: "3.10"
+  TENSORRT_VERSION: "10.5.0.18-1+cuda12.6"
+  PYTORCH_PACKAGE_NAME: "torch"
+  ONNXRUNTIME_PACKAGE_NAME: "onnxruntime"
+
+  HF_HOME: ${{ github.workspace }}/.cache/huggingface
+  # HUGGING_FACE_HUB_TOKEN: ${{ secrets.HUGGING_FACE_HUB_TOKEN }}
+
+  # WORKSPACE_NAME: ${{ secrets.AZURE_WORKSPACE_NAME }}
+  # WORKSPACE_SUBSCRIPTION_ID: ${{ secrets.AZURE_WORKSPACE_SUBSCRIPTION_ID }}
+  # WORKSPACE_RESOURCE_GROUP: ${{ secrets.AZURE_WORKSPACE_RESOURCE_GROUP }}
+  # MANAGED_IDENTITY_CLIENT_ID: ${{ secrets.AZURE_MANAGED_IDENTITY_CLIENT_ID }}
+  # EXCLUDE_MANAGED_IDENTITY_CREDENTIAL: ${{ secrets.AZURE_EXCLUDE_MANAGED_IDENTITY_CREDENTIAL }}
+  # AZURE_KEY_VAULT: ${{ secrets.AZURE_KEY_VAULT }}
+
+  # DOCKER_FILEPATH: "./.azure_pipelines/dockerfiles/linux-gpu.dockerfile"
+  # DOCKER_IMAGE_NAME: "olive-pipeline:latest"
+  # DOCKER_BASE_IMAGE_NAME: "mcr.microsoft.com/mirror/nvcr/nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04"
+
+  # LINUX_CPU_POOL: "olive-1es-pool-ubuntu2004"
+  # LINUX_GPU_POOL: "olive-1es-pool-ubuntu2004-gpu-v100-eastus"
+  # WINDOWS_CPU_POOL: "olive-1es-pool-win2019"
+
+jobs:
+  generate-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Scan, set matrix
+      id: set-matrix
+      run: |
+        echo $pwd
+        python .github/scripts/generate_matrix.py $pwd
+
+  run-examples:
+    needs: generate-matrix
+    strategy:
+      matrix: ${{fromJson(needs.generate-matrix.outputs.matrix)}}
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+    - run: |
+        echo name=${{ matrix.name }}
+        echo config=${{ matrix.config }}
+        echo runs-on=${{ matrix.runs-on }}
