@@ -53,7 +53,8 @@ jobs:
       id: set-matrix
       run: |
         echo ${{ github.workspace }}
-        python .github/scripts/generate_matrix.py ${{ github.workspace }}
+        matrix=$(python .github/scripts/generate_matrix.py ${{ github.workspace }})
+        echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
   run-examples:
     needs: generate-matrix
