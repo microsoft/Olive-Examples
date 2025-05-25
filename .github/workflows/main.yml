@@ -13,7 +13,6 @@ on:
 env:
   PYTHON_VERSION: "3.10"
   TENSORRT_VERSION: "10.5.0.18-1+cuda12.6"
-  PYTORCH_PACKAGE_NAME: "torch"
   ONNXRUNTIME_PACKAGE_NAME: "onnxruntime"
 
   HF_HOME: ${{ github.workspace }}/.cache/huggingface
@@ -53,7 +52,6 @@ jobs:
       id: set-matrix
       run: |
         echo ${{ github.workspace }}
-        # matrix=$(python .github/scripts/generate_matrix.py ${{ github.workspace }})
         matrix=$(python .github/scripts/generate_matrix.py .)
         echo "matrix=$matrix" >> $GITHUB_OUTPUT
 
@@ -61,9 +59,24 @@ jobs:
     needs: generate-matrix
     strategy:
       matrix: ${{fromJson(needs.generate-matrix.outputs.matrix)}}
+    name: ${{ matrix.name }} | ${{ matrix.runs-on }}
     runs-on: ${{ matrix.runs-on }}
+
     steps:
-    - run: |
-        echo name=${{ matrix.name }}
-        echo config=${{ matrix.config }}
-        echo runs-on=${{ matrix.runs-on }}
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Environment
+      uses: ./.github/actions/setup
+      with:
+        shell: ${{ matrix.shell }}
+        python_version: ${{ env.PYTHON_VERSION }}
+        olive_version: ${{ matrix.olive_version }}
+        onnxruntime: ${{ env.ONNXRUNTIME_PACKAGE_NAME }}
+        hf_cache_key: ${{ runner.os }}-${{ matrix.name }}-hf-cache
+        requirements_file: ${{ matrix.requirements_file }}
+
+    - name: Run Command
+      shell: ${{ matrix.shell }}
+      working_directory: ${{ github.workspace }}/${{ matrix.cwd }}
+      run: ${{ matrix.command }}

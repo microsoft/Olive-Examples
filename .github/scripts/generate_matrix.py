@@ -14,11 +14,24 @@ import json
 import sys
 from pathlib import Path
 
-dirpath = sys.argv[1]
+_defaults = {
+    "requirements_file": None,
+    "olive_version": "main",
+}
+
+dirpath = Path(sys.argv[1])
 examples = []
-for filepath in Path(dirpath).rglob("olive_ci_*.json"):
-    name = str(filepath.parent) + "/" + str(filepath.name)[len("olive_ci_"):-len(".json")]
-    examples.append({ "name": name, "config": str(filepath), "runs-on": "ubuntu-latest" })
+for filepath in dirpath.rglob("olive_ci_*.json"):
+    with filepath.open() as strm:
+        config = json.load(strm)
+        config["path"] = str(filepath)
+        config["cwd"] = str(filepath.parent.relative_to(dirpath))
+
+        for key, value in _defaults.items():
+            if key not in config:
+                config[key] = value
+
+        examples.append(config)
 
 matrix = {"include": examples}
 output = json.dumps(matrix)
