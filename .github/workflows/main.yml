@@ -75,7 +75,7 @@ jobs:
         olive_version: ${{ matrix.olive_version }}
         onnxruntime: ${{ env.ONNXRUNTIME_PACKAGE_NAME }}
         hf_cache_key: ${{ runner.os }}-${{ matrix.name }}-hf-cache
-        requirements_file: ${{ matrix.requirements_file }}
+        requirements_file: ${{ matrix.cwd }}/${{ matrix.requirements_file }}
 
     - name: Run Command
       working-directory: ${{ github.workspace }}/${{ matrix.cwd }}
