@@ -48,7 +48,8 @@ runs:
   - name: Checkout Olive (main)
     if: ${{ inputs.olive_version == 'main' }}
     uses: actions/checkout@v4
-    repository: https://github.com/microsoft/Olive.git
+    with:
+      repository: https://github.com/microsoft/Olive.git
 
   - name: Install Olive (main)
     if: ${{ inputs.olive_version == 'main' }}
