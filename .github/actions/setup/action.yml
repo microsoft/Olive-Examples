@@ -55,6 +55,9 @@ runs:
     if: ${{ inputs.olive_version == 'main' }}
     shell: ${{ inputs.shell }}
     run: |
+      echo $pwd
+      ls -la .
+      ls -la $GITHUB_WORKSPACE
       cd Olive
       python -m pip install .
 
