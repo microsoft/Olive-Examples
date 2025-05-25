@@ -77,6 +77,6 @@ jobs:
         requirements_file: ${{ matrix.requirements_file }}
 
     - name: Run Command
+      working-directory: ${{ github.workspace }}/${{ matrix.cwd }}
       shell: ${{ matrix.shell }}
-      working_directory: ${{ github.workspace }}/${{ matrix.cwd }}
       run: ${{ matrix.command }}
