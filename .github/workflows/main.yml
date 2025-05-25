@@ -78,5 +78,4 @@ jobs:
 
     - name: Run Command
       working-directory: ${{ github.workspace }}/${{ matrix.cwd }}
-      shell: ${{ matrix.shell }}
       run: ${{ matrix.command }}
