@@ -48,6 +48,7 @@ runs:
     uses: actions/checkout@v4
     with:
       repository: microsoft/Olive
+      path: Olive
 
   - name: Install Olive (main)
     if: ${{ inputs.olive_version == 'main' }}
