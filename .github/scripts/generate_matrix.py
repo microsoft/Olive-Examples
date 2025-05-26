@@ -20,19 +20,22 @@ _defaults = {
 }
 
 dirpath = Path(sys.argv[1])
+device = sys.argv[2]
+
 examples = []
 for filepath in dirpath.rglob("olive_ci.json"):
     with filepath.open() as strm:
         for config in json.load(strm):
-            config["name"] = f"{filepath.parent.name} | {config['name']}"
-            config["path"] = str(filepath)
-            config["cwd"] = str(filepath.parent.relative_to(dirpath))
+            if config["device"] == device:
+                config["name"] = f"{filepath.parent.name} | {config['name']}"
+                config["path"] = str(filepath)
+                config["cwd"] = str(filepath.parent.relative_to(dirpath))
 
-            for key, value in _defaults.items():
-                if key not in config:
-                    config[key] = value
+                for key, value in _defaults.items():
+                    if key not in config:
+                        config[key] = value
 
-            examples.append(config)
+                examples.append(config)
 
 matrix = {"include": examples}
 output = json.dumps(matrix)

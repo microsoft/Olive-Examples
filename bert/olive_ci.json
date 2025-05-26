@@ -2,6 +2,7 @@
     {
         "name": "ptq | cpu",
         "runs-on": "ubuntu-latest",
+        "device": "cpu",
         "shell": "bash",
         "olive_version": "main",
         "requirements_file": "requirements.txt",
@@ -10,9 +11,19 @@
     {
         "name": "test_ptq | cpu",
         "runs-on": "ubuntu-latest",
+        "device": "cpu",
         "shell": "bash",
         "olive_version": "main",
         "requirements_file": "requirements.txt",
         "command": "../test_runner.sh tests/test_ptq_cpu.py"
+    },
+    {
+        "name": "ptq | gpu",
+        "runs-on": "ubuntu-latest",
+        "device": "gpu",
+        "shell": "bash",
+        "olive_version": "main",
+        "requirements_file": "requirements.txt",
+        "command": "python -m olive run --config ptq_cpu.json"
     }
 ]

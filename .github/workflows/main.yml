@@ -40,7 +40,8 @@ jobs:
   generate-matrix:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      cpu-matrix: ${{ steps.set-matrix.outputs.cpu_matrix }}
+      gpu-matrix: ${{ steps.set-matrix.outputs.gpu_matrix }}
 
     steps:
     - name: Checkout Code
@@ -54,17 +55,47 @@ jobs:
     - name: Scan & generate matrix
       id: set-matrix
       run: |
-        echo ${{ github.workspace }}
-        matrix=$(python .github/scripts/generate_matrix.py .)
-        echo "matrix=$matrix" >> $GITHUB_OUTPUT
+        matrix=$(python .github/scripts/generate_matrix.py . cpu)
+        echo "cpu-matrix=$matrix" >> $GITHUB_OUTPUT
 
-  run-examples:
+        matrix=$(python .github/scripts/generate_matrix.py . gpu)
+        echo "gpu-matrix=$matrix" >> $GITHUB_OUTPUT
+
+  run-cpu-examples:
+    if: false
     needs: generate-matrix
     strategy:
       fail-fast: false
-      matrix: ${{fromJson(needs.generate-matrix.outputs.matrix)}}
+      matrix: ${{fromJson(needs.generate-matrix.outputs.cpu-matrix)}}
     name: ${{ matrix.name }} | ${{ matrix.runs-on }}
     runs-on: ${{ matrix.runs-on }}
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Environment
+      uses: ./.github/actions/setup
+      with:
+        shell: ${{ matrix.shell }}
+        python_version: ${{ env.PYTHON_VERSION }}
+        olive_version: ${{ matrix.olive_version }}
+        onnxruntime: ${{ env.ONNXRUNTIME_PACKAGE_NAME }}
+        hf_cache_key: ${{ runner.os }}-${{ matrix.name }}-hf-cache
+        requirements_file: ${{ matrix.cwd }}/${{ matrix.requirements_file }}
+
+    - name: Run Command
+      working-directory: ${{ github.workspace }}/${{ matrix.cwd }}
+      run: ${{ matrix.command }}
+
+  run-gpu-examples:
+    needs: generate-matrix
+    strategy:
+      fail-fast: false
+      matrix: ${{fromJson(needs.generate-matrix.outputs.gpu-matrix)}}
+    name: ${{ matrix.name }} | ${{ matrix.runs-on }}
+    runs-on: ${{ env.LINUX_GPU_POOL }}
+    # ${{ matrix.runs-on }}
 
     steps:
     - name: Checkout Code
