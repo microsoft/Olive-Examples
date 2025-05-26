@@ -94,7 +94,7 @@ jobs:
       fail-fast: false
       matrix: ${{fromJson(needs.generate-matrix.outputs.gpu-matrix)}}
     name: ${{ matrix.name }} | ${{ matrix.runs-on }}
-    runs-on: ${{ env.LINUX_GPU_POOL }}
+    runs-on: "olive-1es-pool-ubuntu2004-gpu-v100-eastus"
     # ${{ matrix.runs-on }}
 
     steps:
