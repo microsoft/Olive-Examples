@@ -4,9 +4,12 @@
 # --------------------------------------------------------------------------
 import os
 
+import sys
+sys.path.insert(0, os.path.join(__file__, "..", "..", ".."))
+
 import pytest
 
-from ..utils import check_output, get_example_dir, patch_config
+from utils import check_output, get_example_dir, patch_config
 
 
 @pytest.fixture(scope="module", autouse=True)
