@@ -21,6 +21,8 @@ env:
 
   WORKSPACE_NAME: ${{ secrets.AZURE_WORKSPACE_NAME }}
   WORKSPACE_SUBSCRIPTION_ID: ${{ secrets.AZURE_WORKSPACE_SUBSCRIPTION_ID }}
+  # Don't make the following a secret. Github runner would mask it
+  # making the matrix generation logic invalid.
   WORKSPACE_RESOURCE_GROUP: ${{ vars.AZURE_WORKSPACE_RESOURCE_GROUP }}
   MANAGED_IDENTITY_CLIENT_ID: ${{ secrets.AZURE_MANAGED_IDENTITY_CLIENT_ID }}
   EXCLUDE_MANAGED_IDENTITY_CREDENTIAL: ${{ secrets.AZURE_EXCLUDE_MANAGED_IDENTITY_CREDENTIAL }}
