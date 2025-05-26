@@ -56,13 +56,13 @@ jobs:
       id: gen-cpu-matrix
       run: |
         matrix=$(python .github/scripts/generate_matrix.py . cpu)
-        echo "cpu-matrix=$matrix" >> $GITHUB_OUTPUT
+        echo "cpu_matrix=$matrix" >> $GITHUB_OUTPUT
 
     - name: Scan & generate matrix
       id: gen-gpu-matrix
       run: |
         matrix=$(python .github/scripts/generate_matrix.py . gpu)
-        echo "gpu-matrix=$matrix" >> $GITHUB_OUTPUT
+        echo "gpu_matrix=$matrix" >> $GITHUB_OUTPUT
 
   run-cpu-examples:
     if: false
