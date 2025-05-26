@@ -41,7 +41,9 @@ runs:
     with:
       python-version: ${{ inputs.python_version }}
       cache: 'pip'
-      cache-dependency-path: ${{ inputs.requirements_file }}
+      cache-dependency-path: |
+        requirements.txt
+        ${{ inputs.requirements_file }}
 
   - name: Checkout Olive (main)
     if: ${{ inputs.olive_version == 'main' }}

@@ -24,7 +24,7 @@ examples = []
 for filepath in dirpath.rglob("olive_ci.json"):
     with filepath.open() as strm:
         for config in json.load(strm):
-            config["name"] = str(filepath.parent.name)
+            config["name"] = f"{filepath.parent.name} | {config['name']}"
             config["path"] = str(filepath)
             config["cwd"] = str(filepath.parent.relative_to(dirpath))
 

@@ -1,6 +1,6 @@
 [
     {
-        "name": "ptq [cpu]",
+        "name": "ptq | cpu",
         "runs-on": "ubuntu-latest",
         "shell": "bash",
         "olive_version": "main",
@@ -8,7 +8,7 @@
         "command": "python -m olive run --config ptq_cpu.json"
     },
     {
-        "name": "test_ptq [cpu]",
+        "name": "test_ptq | cpu",
         "runs-on": "ubuntu-latest",
         "shell": "bash",
         "olive_version": "main",
