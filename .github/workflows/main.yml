@@ -33,7 +33,7 @@ env:
   DOCKER_BASE_IMAGE_NAME: ${{ secrets.DOCKER_BASE_IMAGE_NAME }}
 
   LINUX_CPU_POOL: ${{ secrets.LINUX_CPU_POOL }}
-  LINUX_GPU_POOL: ${{ secrets.LINUX_GPU_POOL }}
+  LINUX_GPU_POOL: "olive-1es-pool-ubuntu2004-gpu-v100-eastus" # ${{ secrets.LINUX_GPU_POOL }}
   WINDOWS_CPU_POOL: ${{ secrets.WINDOWS_CPU_POOL }}
 
 jobs:
