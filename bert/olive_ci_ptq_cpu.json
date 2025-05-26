@@ -1,8 +1,0 @@
-{
-    "name": "bert_ptq [cpu]",
-    "runs-on": "ubuntu-latest",
-    "shell": "bash",
-    "olive_version": "main",
-    "requirements_file": "requirements.txt",
-    "command": "python -m olive run --config ptq_cpu.json"
-}

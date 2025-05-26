@@ -14,24 +14,25 @@ env:
   PYTHON_VERSION: "3.10"
   TENSORRT_VERSION: "10.5.0.18-1+cuda12.6"
   ONNXRUNTIME_PACKAGE_NAME: "onnxruntime"
+  PYTEST_BASETEMP: ${{ github.workspace }}/.pytest_basetemp
 
   HF_HOME: ${{ github.workspace }}/.cache/huggingface
-  # HUGGING_FACE_HUB_TOKEN: ${{ secrets.HUGGING_FACE_HUB_TOKEN }}
+  HUGGING_FACE_HUB_TOKEN: ${{ secrets.HUGGING_FACE_HUB_TOKEN }}
 
-  # WORKSPACE_NAME: ${{ secrets.AZURE_WORKSPACE_NAME }}
-  # WORKSPACE_SUBSCRIPTION_ID: ${{ secrets.AZURE_WORKSPACE_SUBSCRIPTION_ID }}
-  # WORKSPACE_RESOURCE_GROUP: ${{ secrets.AZURE_WORKSPACE_RESOURCE_GROUP }}
-  # MANAGED_IDENTITY_CLIENT_ID: ${{ secrets.AZURE_MANAGED_IDENTITY_CLIENT_ID }}
-  # EXCLUDE_MANAGED_IDENTITY_CREDENTIAL: ${{ secrets.AZURE_EXCLUDE_MANAGED_IDENTITY_CREDENTIAL }}
-  # AZURE_KEY_VAULT: ${{ secrets.AZURE_KEY_VAULT }}
+  WORKSPACE_NAME: ${{ secrets.AZURE_WORKSPACE_NAME }}
+  WORKSPACE_SUBSCRIPTION_ID: ${{ secrets.AZURE_WORKSPACE_SUBSCRIPTION_ID }}
+  WORKSPACE_RESOURCE_GROUP: ${{ secrets.AZURE_WORKSPACE_RESOURCE_GROUP }}
+  MANAGED_IDENTITY_CLIENT_ID: ${{ secrets.AZURE_MANAGED_IDENTITY_CLIENT_ID }}
+  EXCLUDE_MANAGED_IDENTITY_CREDENTIAL: ${{ secrets.AZURE_EXCLUDE_MANAGED_IDENTITY_CREDENTIAL }}
+  AZURE_KEY_VAULT: ${{ secrets.AZURE_KEY_VAULT }}
 
-  # DOCKER_FILEPATH: "./.azure_pipelines/dockerfiles/linux-gpu.dockerfile"
-  # DOCKER_IMAGE_NAME: "olive-pipeline:latest"
-  # DOCKER_BASE_IMAGE_NAME: "mcr.microsoft.com/mirror/nvcr/nvidia/cuda:12.4.1-cudnn-devel-ubuntu22.04"
+  DOCKER_FILEPATH: "./.azure_pipelines/dockerfiles/linux-gpu.dockerfile"
+  DOCKER_IMAGE_NAME: ${{ secrets.DOCKER_IMAGE_NAME }}
+  DOCKER_BASE_IMAGE_NAME: ${{ secrets.DOCKER_BASE_IMAGE_NAME }}
 
-  # LINUX_CPU_POOL: "olive-1es-pool-ubuntu2004"
-  # LINUX_GPU_POOL: "olive-1es-pool-ubuntu2004-gpu-v100-eastus"
-  # WINDOWS_CPU_POOL: "olive-1es-pool-win2019"
+  LINUX_CPU_POOL: ${{ secrets.LINUX_CPU_POOL }}
+  LINUX_GPU_POOL: ${{ secrets.LINUX_GPU_POOL }}
+  WINDOWS_CPU_POOL: ${{ secrets.WINDOWS_CPU_POOL }}
 
 jobs:
   generate-matrix:

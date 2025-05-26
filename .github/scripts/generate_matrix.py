@@ -4,7 +4,7 @@
 # --------------------------------------------------------------------------
 
 """
-Script to scan the input directory for files with pattern "olive_ci_*.py"
+Script to scan the input directory for files with name "olive_ci.json"
 and generate output that can be set as matrix for another CI job.
 
 Example:
@@ -21,17 +21,18 @@ _defaults = {
 
 dirpath = Path(sys.argv[1])
 examples = []
-for filepath in dirpath.rglob("olive_ci_*.json"):
+for filepath in dirpath.rglob("olive_ci.json"):
     with filepath.open() as strm:
-        config = json.load(strm)
-        config["path"] = str(filepath)
-        config["cwd"] = str(filepath.parent.relative_to(dirpath))
+        for config in json.load(strm):
+            config["name"] = str(filepath.parent.name)
+            config["path"] = str(filepath)
+            config["cwd"] = str(filepath.parent.relative_to(dirpath))
 
-        for key, value in _defaults.items():
-            if key not in config:
-                config[key] = value
+            for key, value in _defaults.items():
+                if key not in config:
+                    config[key] = value
 
-        examples.append(config)
+            examples.append(config)
 
 matrix = {"include": examples}
 output = json.dumps(matrix)
