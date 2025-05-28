@@ -3,40 +3,35 @@
         "name": "ptq",
         "os": "ubuntu",
         "device": "cpu",
-        "olive_version": "main",
-        "requirements_file": "requirements.txt",
+        "requirements_file": "requirements_cpu.txt",
         "command": "python -m olive run --config ptq_cpu.json"
     },
     {
         "name": "ptq",
         "os": "windows",
         "device": "cpu",
-        "olive_version": "main",
-        "requirements_file": "requirements.txt",
+        "requirements_file": "requirements_cpu.txt",
         "command": "python -m olive run --config ptq_cpu.json"
     },
     {
         "name": "test_ptq",
         "os": "ubuntu",
         "device": "cpu",
-        "olive_version": "main",
-        "requirements_file": "requirements.txt",
+        "requirements_file": "requirements_cpu.txt",
         "command": "../test_runner.sh tests/test_ptq_cpu.py"
     },
     {
         "name": "test_ptq",
         "os": "windows",
         "device": "cpu",
-        "olive_version": "main",
-        "requirements_file": "requirements.txt",
+        "requirements_file": "requirements_cuda.txt",
         "command": "../test_runner.sh tests/test_ptq_cpu.py"
     },
     {
         "name": "ptq",
         "os": "ubuntu",
         "device": "cuda",
-        "olive_version": "main",
-        "requirements_file": "requirements.txt",
+        "requirements_file": "requirements_cuda.txt",
         "command": "python -m olive run --config ptq_cuda.json"
     }
 ]

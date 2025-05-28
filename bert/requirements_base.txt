@@ -5,6 +5,7 @@ datasets<3.0.0
 docker>=7.1.0
 evaluate
 neural-compressor
+olive-ai
 optimum
 pytorch_lightning
 # https://github.com/huggingface/evaluate/issues/655

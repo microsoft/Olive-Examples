@@ -15,8 +15,7 @@ import sys
 from pathlib import Path
 
 _defaults = {
-    "requirements_file": None,
-    "olive_version": "main",
+    "requirements_file": "",
 }
 
 dirpath = Path(sys.argv[1])
