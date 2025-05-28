@@ -1,29 +1,42 @@
 [
     {
-        "name": "ptq | cpu",
-        "runs-on": "ubuntu-latest",
+        "name": "ptq",
+        "os": "ubuntu",
         "device": "cpu",
-        "shell": "bash",
         "olive_version": "main",
         "requirements_file": "requirements.txt",
         "command": "python -m olive run --config ptq_cpu.json"
     },
     {
-        "name": "test_ptq | cpu",
-        "runs-on": "ubuntu-latest",
+        "name": "ptq",
+        "os": "windows",
         "device": "cpu",
-        "shell": "bash",
+        "olive_version": "main",
+        "requirements_file": "requirements.txt",
+        "command": "python -m olive run --config ptq_cpu.json"
+    },
+    {
+        "name": "test_ptq",
+        "os": "ubuntu",
+        "device": "cpu",
         "olive_version": "main",
         "requirements_file": "requirements.txt",
         "command": "../test_runner.sh tests/test_ptq_cpu.py"
     },
     {
-        "name": "ptq | gpu",
-        "runs-on": "ubuntu-latest",
-        "device": "gpu",
-        "shell": "bash",
+        "name": "test_ptq",
+        "os": "windows",
+        "device": "cpu",
         "olive_version": "main",
         "requirements_file": "requirements.txt",
-        "command": "python -m olive run --config ptq_gpu.json"
+        "command": "../test_runner.sh tests/test_ptq_cpu.py"
+    },
+    {
+        "name": "ptq",
+        "os": "ubuntu",
+        "device": "cuda",
+        "olive_version": "main",
+        "requirements_file": "requirements.txt",
+        "command": "python -m olive run --config ptq_cuda.json"
     }
 ]

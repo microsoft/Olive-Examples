@@ -20,14 +20,15 @@ _defaults = {
 }
 
 dirpath = Path(sys.argv[1])
-device = sys.argv[2]
+os = sys.argv[2]
+device = sys.argv[3]
 
 examples = []
 for filepath in dirpath.rglob("olive_ci.json"):
     with filepath.open() as strm:
         for config in json.load(strm):
-            if config["device"] == device:
-                config["name"] = f"{filepath.parent.name} | {config['name']}"
+            if config["os"] == os and config["device"] == device:
+                config["name"] = f"{filepath.parent.name} | {config['name']} | {os} | {device}"
                 config["path"] = str(filepath)
                 config["cwd"] = str(filepath.parent.relative_to(dirpath))
 

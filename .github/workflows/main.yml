@@ -40,8 +40,10 @@ jobs:
   generate-matrix:
     runs-on: ubuntu-latest
     outputs:
-      cpu-matrix: ${{ steps.gen-cpu-matrix.outputs.cpu_matrix }}
-      gpu-matrix: ${{ steps.gen-gpu-matrix.outputs.gpu_matrix }}
+      ubuntu-cpu-matrix: ${{ steps.ubuntu-gen-cpu-matrix.outputs.ubuntu_cpu_matrix }}
+      ubuntu-cuda-matrix: ${{ steps.ubuntu-gen-cuda-matrix.outputs.ubuntu_cuda_matrix }}
+      windows-cpu-matrix: ${{ steps.windows-gen-cpu-matrix.outputs.windows_cpu_matrix }}
+      windows-cuda-matrix: ${{ steps.windows-gen-cuda-matrix.outputs.windows_cuda_matrix }}
 
     steps:
     - name: Checkout Code
@@ -52,26 +54,64 @@ jobs:
       with:
         python-version: ${{ env.PYTHON_VERSION }}
 
-    - name: Scan & generate matrix
-      id: gen-cpu-matrix
+    - name: Scan & generate matrix (Ubuntu + CPU)
+      id: ubuntu-gen-cpu-matrix
       run: |
-        matrix=$(python .github/scripts/generate_matrix.py . cpu)
-        echo "cpu_matrix=$matrix" >> $GITHUB_OUTPUT
+        matrix=$(python .github/scripts/generate_matrix.py . ubuntu cpu)
+        echo "ubuntu_cpu_matrix=$matrix" >> $GITHUB_OUTPUT
 
-    - name: Scan & generate matrix
-      id: gen-gpu-matrix
+    - name: Scan & generate matrix (Ubuntu + CUDA)
+      id: ubuntu-gen-cuda-matrix
       run: |
-        matrix=$(python .github/scripts/generate_matrix.py . gpu)
-        echo "gpu_matrix=$matrix" >> $GITHUB_OUTPUT
+        matrix=$(python .github/scripts/generate_matrix.py . ubuntu cuda)
+        echo "ubuntu_cuda_matrix=$matrix" >> $GITHUB_OUTPUT
 
-  run-cpu-examples:
+    - name: Scan & generate matrix (Windows + CPU)
+      id: windows-gen-cpu-matrix
+      run: |
+        matrix=$(python .github/scripts/generate_matrix.py . windows cpu)
+        echo "windows_cpu_matrix=$matrix" >> $GITHUB_OUTPUT
+
+    - name: Scan & generate matrix (Windows + CUDA)
+      id: windows-gen-cuda-matrix
+      run: |
+        matrix=$(python .github/scripts/generate_matrix.py . windows cuda)
+        echo "windows_cuda_matrix=$matrix" >> $GITHUB_OUTPUT
+
+  ubuntu-cpu-examples:
+    needs: generate-matrix
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJson(needs.generate-matrix.outputs.ubuntu-cpu-matrix) }}
+    name: ${{ matrix.name }}
+    runs-on: [ self-hosted, 1ES.Pool=olive-github-ubuntu2204-cpu ]
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Environment
+      uses: ./.github/actions/setup
+      with:
+        shell: bash
+        python_version: ${{ env.PYTHON_VERSION }}
+        olive_version: ${{ matrix.olive_version }}
+        onnxruntime: ${{ env.ONNXRUNTIME_PACKAGE_NAME }}
+        hf_cache_key: ${{ runner.os }}-${{ matrix.name }}-hf-cache
+        requirements_file: ${{ matrix.cwd }}/${{ matrix.requirements_file }}
+
+    - name: Run Command
+      working-directory: ${{ github.workspace }}/${{ matrix.cwd }}
+      run: ${{ matrix.command }}
+
+  ubuntu-cuda-examples:
     if: false
     needs: generate-matrix
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(needs.generate-matrix.outputs.cpu-matrix) }}
-    name: ${{ matrix.name }} | ${{ matrix.runs-on }}
-    runs-on: ${{ matrix.runs-on }}
+      matrix: ${{ fromJson(needs.generate-matrix.outputs.ubuntu-cuda-matrix) }}
+    name: ${{ matrix.name }}
+    runs-on: [ self-hosted, 1ES.Pool=olive-github-ubuntu2204-cuda-A10 ]
 
     steps:
     - name: Checkout Code
@@ -91,14 +131,13 @@ jobs:
       working-directory: ${{ github.workspace }}/${{ matrix.cwd }}
       run: ${{ matrix.command }}
 
-  run-gpu-examples:
+  windows-cpu-examples:
     needs: generate-matrix
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(needs.generate-matrix.outputs.gpu-matrix) }}
-    name: ${{ matrix.name }} | ${{ matrix.runs-on }}
-    runs-on: [ self-hosted, 1ES.Pool=olive-github-ubuntu2204-cuda-A10 ]
-    # ${{ matrix.runs-on }}
+      matrix: ${{ fromJson(needs.generate-matrix.outputs.windows-cpu-matrix) }}
+    name: ${{ matrix.name }}
+    runs-on: [ self-hosted, 1ES.Pool=olive-github-win2022-cpu ]
 
     steps:
     - name: Checkout Code
@@ -107,7 +146,7 @@ jobs:
     - name: Setup Environment
       uses: ./.github/actions/setup
       with:
-        shell: ${{ matrix.shell }}
+        shell: cmd
         python_version: ${{ env.PYTHON_VERSION }}
         olive_version: ${{ matrix.olive_version }}
         onnxruntime: ${{ env.ONNXRUNTIME_PACKAGE_NAME }}
