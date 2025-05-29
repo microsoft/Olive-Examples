@@ -57,7 +57,7 @@ This workflow also demonstrates how to use:
 - Huggingface `datasets` to load data from [dataset hub](https://huggingface.co/datasets).
 - Huggingface `evaluate` to load multi metrics from [metric hub](https://huggingface.co/evaluate-metric).
 
-Config file: [bert_ptq_cpu.json](bert_ptq_cpu.json)
+Config file: [cpu/ptq.json](cpu/ptq.json)
 
 #### AzureML Model Source and No Auto-tuning
 The workflow in [bert_ptq_cpu_aml.json](bert_ptq_cpu_aml.json) is similar to the above workflow, but uses AzureML Model Source to load the model and does not perform auto-tuning. Without auto-tuning, the passes will be run with the default parameters (no search space) and the final model and metrics will be saved in the output directory.
